@@ -1,0 +1,13 @@
+#display {
+    display: block;
+    width: 40%;
+    margin: 20px auto 5px;
+    font-size: 36px;
+}
+
+#buttons {
+    display: grid;
+    grid-template: repeat(4, 1fr) / repeat(4, 1fr);
+    width: 40%;
+    margin: auto;
+}
