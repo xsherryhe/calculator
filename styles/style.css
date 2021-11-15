@@ -1,13 +1,24 @@
+* {
+    font-size: 36px;
+}
+
 #display {
+    box-sizing: border-box;
     display: block;
     width: 40%;
     margin: 20px auto 5px;
-    font-size: 36px;
+    text-align: right;
 }
 
 #buttons {
     display: grid;
-    grid-template: repeat(4, 1fr) / repeat(4, 1fr);
+    grid-template: repeat(5, 1fr) / repeat(4, 1fr);
+    column-gap: 5px;
+    row-gap: 5px;
     width: 40%;
     margin: auto;
+}
+
+#Clear {
+    grid-column: 1 / span 4;
 }
