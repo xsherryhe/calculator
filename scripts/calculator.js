@@ -7,7 +7,7 @@ function createButtons() {
         button.id = symbol;
         button.textContent = symbol;
         if(typeof symbol == 'number' || symbol == '.') 
-            button.addEventListener('click', addToDisplay);
+            button.addEventListener('click', updateValue);
         if(['+', '-', 'x', '÷', '='].includes(symbol))
             button.addEventListener('click', updateOperation);
         buttons.appendChild(button);
@@ -21,19 +21,24 @@ function resetOperationStorage() {
 }
 resetOperationStorage();
 
-function addToDisplay(e) {
+//to do: add clear button functionality
+function updateValue(e) {
+    populateDisplay(e.target.id);
+    document.querySelector('#display').addOn = true;
+}
+
+function populateDisplay(value) {
     const display = document.querySelector('#display');
     if(!display.addOn) display.value = '';
-    document.querySelector('#display').value += e.target.id;
-    display.addOn = true;
+    display.value += value;
 }
 
 function updateOperation(e) {
     const display = document.querySelector('#display');
     operate.nums.push(display.value);
+    display.addOn = false;
     if(e.target.id == '=') operate();
     else operate.operation = e.target.id;
-    display.addOn = false;
 }
 
 function operate() {
@@ -47,5 +52,5 @@ function operate() {
         case '÷': result = x / y; break;
     }
     resetOperationStorage();
-    document.querySelector('#display').value = result;
+    populateDisplay(result);
 }
