@@ -7,20 +7,38 @@ function createButtons() {
         button.id = symbol;
         button.textContent = symbol;
         if(typeof symbol == 'number' || symbol == '.') 
-            button.addEventListener('click', populateDisplay);
+            button.addEventListener('click', addToDisplay);
+        if(['+', '-', 'x', '÷', '='].includes(symbol))
+            button.addEventListener('click', updateOperation);
         buttons.appendChild(button);
     })
 }
 createButtons();
 
-function populateDisplay(e) {
+function resetOperationStorage() {
+    operate.operation = '';
+    operate.nums = [];
+}
+resetOperationStorage();
+
+function addToDisplay(e) {
     const display = document.querySelector('#display');
-    if(display.value == '0') display.value = '';
+    if(!display.addOn) display.value = '';
     document.querySelector('#display').value += e.target.id;
+    display.addOn = true;
+}
+
+function updateOperation(e) {
+    const display = document.querySelector('#display');
+    operate.nums.push(display.value);
+    if(e.target.id == '=') operate();
+    else operate.operation = e.target.id;
+    display.addOn = false;
 }
 
 function operate() {
-    const [x, y] = operate.nums;
+    if(operate.nums.length < 2 || !operate.operation) return;
+    const [x, y] = operate.nums.map(Number);
     let result;
     switch(operate.operation) {
         case '+': result = x + y; break;
@@ -28,6 +46,6 @@ function operate() {
         case 'x': result = x * y; break;
         case '÷': result = x / y; break;
     }
-    operate.operation = '';
-    operate.nums = [];
+    resetOperationStorage();
+    document.querySelector('#display').value = result;
 }
