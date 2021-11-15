@@ -8,10 +8,12 @@ function createButtons() {
         button.textContent = symbol;
         if(typeof symbol == 'number' || symbol == '.') 
             button.addEventListener('click', updateValue);
-        if(['+', '-', 'x', '÷', '='].includes(symbol))
+        if(['+', '-', 'x', '÷'].includes(symbol))
             button.addEventListener('click', updateOperation);
+        if(symbol == '=')
+            button.addEventListener('click', finishOperation);
         if(symbol == 'Clear')
-            button.addEventListener('click', clearDisplay);
+            button.addEventListener('click', clearCalculator);
         buttons.appendChild(button);
     })
 }
@@ -23,30 +25,45 @@ function resetOperationStorage() {
 }
 resetOperationStorage();
 
-function populateDisplay(value) {
-    if (!populateDisplay.addOn) display.value = '';
-    document.querySelector('#display').value += value;
+function clearCalculator() {
+    updateValue.addOn = false;
+    populateDisplay(0);
+    resetOperationStorage();
 }
 
-function clearDisplay() {
-    populateDisplay.addOn = false;
-    populateDisplay(0);
+function populateDisplay(value) {
+    const display = document.querySelector('#display');
+    if (!updateValue.addOn) display.value = '';
+    display.value += value;
+}
+
+function storeValue(value) {
+    if(updateValue.addOn) 
+        operate.nums[operate.nums.length - 1] += '' + value;
+    else operate.nums.push(value);
 }
 
 function updateValue(e) {
     populateDisplay(e.target.id);
-    populateDisplay.addOn = true;
+    storeValue(e.target.id);
+    updateValue.addOn = true;
 }
 
 function updateOperation(e) {
-    operate.nums.push(document.querySelector('#display').value);
-    populateDisplay.addOn = false;
-    if(e.target.id == '=') operate();
-    else operate.operation = e.target.id;
+    updateValue.addOn = false;
+    if(operate.nums.length == 2 && operate.operation) {
+        let operationResult = operate();
+        storeValue(operationResult);
+    }
+    operate.operation = e.target.id;
+}
+
+function finishOperation() {
+    updateValue.addOn = false;
+    if(operate.nums.length == 2 && operate.operation) operate();
 }
 
 function operate() {
-    if(operate.nums.length < 2 || !operate.operation) return;
     const [x, y] = operate.nums.map(Number);
     let result;
     switch(operate.operation) {
@@ -55,6 +72,7 @@ function operate() {
         case 'x': result = x * y; break;
         case '÷': result = x / y; break;
     }
-    resetOperationStorage();
     populateDisplay(result);
+    resetOperationStorage();
+    return result;
 }
