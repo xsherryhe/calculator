@@ -10,6 +10,8 @@ function createButtons() {
             button.addEventListener('click', updateValue);
         if(['+', '-', 'x', '÷', '='].includes(symbol))
             button.addEventListener('click', updateOperation);
+        if(symbol == 'Clear')
+            button.addEventListener('click', clearDisplay);
         buttons.appendChild(button);
     })
 }
@@ -21,22 +23,24 @@ function resetOperationStorage() {
 }
 resetOperationStorage();
 
-//to do: add clear button functionality
-function updateValue(e) {
-    populateDisplay(e.target.id);
-    document.querySelector('#display').addOn = true;
+function populateDisplay(value) {
+    if (!populateDisplay.addOn) display.value = '';
+    document.querySelector('#display').value += value;
 }
 
-function populateDisplay(value) {
-    const display = document.querySelector('#display');
-    if(!display.addOn) display.value = '';
-    display.value += value;
+function clearDisplay() {
+    populateDisplay.addOn = false;
+    populateDisplay(0);
+}
+
+function updateValue(e) {
+    populateDisplay(e.target.id);
+    populateDisplay.addOn = true;
 }
 
 function updateOperation(e) {
-    const display = document.querySelector('#display');
-    operate.nums.push(display.value);
-    display.addOn = false;
+    operate.nums.push(document.querySelector('#display').value);
+    populateDisplay.addOn = false;
     if(e.target.id == '=') operate();
     else operate.operation = e.target.id;
 }
