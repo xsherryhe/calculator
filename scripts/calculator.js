@@ -64,7 +64,12 @@ function finishOperation() {
 }
 
 function operate() {
-    const [x, y] = operate.nums.map(Number);
+    let [x, y] = operate.nums.map(Number);
+    if(y == 0 && operate.operation == '÷') {
+        alert('No dividing by zero!');
+        [x, y] = [0, 1];
+    }
+
     let result;
     switch(operate.operation) {
         case '+': result = x + y; break;
@@ -72,6 +77,7 @@ function operate() {
         case 'x': result = x * y; break;
         case '÷': result = x / y; break;
     }
+    result = Math.round((result + Number.EPSILON) * 10**15) / 10**15;
     populateDisplay(result);
     resetOperationStorage();
     return result;
