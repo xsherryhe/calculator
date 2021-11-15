@@ -1,6 +1,6 @@
 function createButtons() {
     const buttons = document.querySelector('#buttons');
-    [7, 8, 9, '÷', 4, 5, 6, 'x', 1, 2, 3, '-', 0, '.', '=', '+', 'Clear']
+    [7, 8, 9, '÷', 4, 5, 6, 'x', 1, 2, 3, '-', '.', 0, '=', '+', 'Clear']
     .forEach(symbol => {
         const button = document.createElement('button');
         button.classList.add('button');
@@ -44,8 +44,14 @@ function storeValue(value) {
 }
 
 function updateValue(e) {
-    populateDisplay(e.target.id);
-    storeValue(e.target.id);
+    let value = e.target.id;
+    if(value == '.') {
+        if (!updateValue.addOn) value = '0.';
+        else if(document.querySelector('#display').value.includes('.'))
+            return;
+    }
+    populateDisplay(value);
+    storeValue(value);
     updateValue.addOn = true;
 }
 
@@ -77,7 +83,7 @@ function operate() {
         case 'x': result = x * y; break;
         case '÷': result = x / y; break;
     }
-    result = Math.round((result + Number.EPSILON) * 10**15) / 10**15;
+    result = Math.round((result + Number.EPSILON) * 10**14) / 10**14;
     populateDisplay(result);
     resetOperationStorage();
     return result;
