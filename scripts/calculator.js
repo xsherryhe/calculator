@@ -17,12 +17,30 @@ function createButtons() {
 }
 createButtons();
 
+function enableKeyboard() {
+    window.addEventListener('keyup', routeKey);
+}
+enableKeyboard();
+
+function routeKey(e) {
+    const symbol = e.key,
+          button = [...document.querySelectorAll('.button')]
+                   .find(button => button.id == symbol);
+
+    if(button) button.click();
+    if(symbol == '*') document.getElementById('x').click();
+    if(symbol == '/') document.getElementById('÷').click();
+    if(symbol == 'Backspace') document.getElementById('Delete').click();
+    if(symbol == 'Enter') document.getElementById('=').click();
+}
+
 function setOperationStorage() {
     operate.operation = '';
     operate.nums = [...arguments];
 }
 
 function clearCalculator() {
+    document.querySelector('#Clear').blur();
     populateDisplay.replaceLast = true;
     populateDisplay(0);
     setOperationStorage();
@@ -46,6 +64,7 @@ function storeValue(value) {
 }
 
 function updateValue(e) {
+    e.target.blur();
     let value = e.target.id,
         display = document.querySelector('#display');
     if(value == '.') {
@@ -60,6 +79,7 @@ function updateValue(e) {
 }
 
 function updateOperation(e) {
+    e.target.blur();
     let operation = e.target.id;
     populateDisplay.replaceLast = true;
     storeValue.replaceLast = operation == '=';
