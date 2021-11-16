@@ -8,10 +8,8 @@ function createButtons() {
         button.textContent = symbol;
         if(typeof symbol == 'number' || symbol == '.') 
             button.addEventListener('click', updateValue);
-        if(['+', '-', 'x', '÷'].includes(symbol))
+        if(['+', '-', 'x', '÷', '='].includes(symbol))
             button.addEventListener('click', updateOperation);
-        if(symbol == '=')
-            button.addEventListener('click', finishOperation);
         if(symbol == 'Clear')
             button.addEventListener('click', clearCalculator);
         buttons.appendChild(button);
@@ -19,54 +17,47 @@ function createButtons() {
 }
 createButtons();
 
-function resetOperationStorage() {
+function setOperationStorage() {
     operate.operation = '';
-    operate.nums = [];
+    operate.nums = [...arguments];
 }
-resetOperationStorage();
 
 function clearCalculator() {
-    updateValue.addOn = false;
+    populateDisplay.replaceLast = true;
     populateDisplay(0);
-    resetOperationStorage();
+    setOperationStorage();
 }
+clearCalculator();
 
 function populateDisplay(value) {
     const display = document.querySelector('#display');
-    if (!updateValue.addOn) display.value = '';
+    if(populateDisplay.replaceLast) display.value = '';
     display.value += value;
 }
 
 function storeValue(value) {
-    if(updateValue.addOn) 
-        operate.nums[operate.nums.length - 1] += '' + value;
-    else operate.nums.push(value);
+    if(storeValue.replaceLast) operate.nums.pop();
+    operate.nums.push(value);
 }
 
 function updateValue(e) {
-    let value = e.target.id;
+    let value = e.target.id,
+        display = document.querySelector('#display');
     if(value == '.') {
-        if (!updateValue.addOn) value = '0.';
-        else if(document.querySelector('#display').value.includes('.'))
-            return;
+        if(populateDisplay.replaceLast) value = '0.';
+        else if(display.value.includes('.')) return;
     }
     populateDisplay(value);
-    storeValue(value);
-    updateValue.addOn = true;
+    populateDisplay.replaceLast = false;
+    storeValue(display.value);
+    storeValue.replaceLast = true;
 }
 
 function updateOperation(e) {
-    updateValue.addOn = false;
-    if(operate.nums.length == 2 && operate.operation) {
-        let operationResult = operate();
-        storeValue(operationResult);
-    }
-    operate.operation = e.target.id;
-}
-
-function finishOperation() {
-    updateValue.addOn = false;
+    populateDisplay.replaceLast = true;
+    storeValue.replaceLast = e.target.id == '=';
     if(operate.nums.length == 2 && operate.operation) operate();
+    if(e.target.id !== '=') operate.operation = e.target.id;
 }
 
 function operate() {
@@ -85,6 +76,6 @@ function operate() {
     }
     result = Math.round((result + Number.EPSILON) * 10**14) / 10**14;
     populateDisplay(result);
-    resetOperationStorage();
+    setOperationStorage(result);
     return result;
 }
