@@ -1,5 +1,7 @@
+const buttons = document.querySelector('#buttons'),
+      display = document.querySelector('#display');
+
 function createButtons() {
-    const buttons = document.querySelector('#buttons');
     ['Clear', 'Delete', 7, 8, 9, '÷', 4, 5, 6, 'x', 1, 2, 3, '-', '.', 0, '=', '+']
     .forEach(symbol => {
         const button = document.createElement('button');
@@ -35,8 +37,7 @@ function routeKey(e) {
                          Enter: '='};
     let symbol = e.key;
     if(conversions[symbol]) symbol = conversions[symbol];
-    const button = [...document.querySelectorAll('.button')]
-                   .find(button => button.id == symbol);
+    const button = [...buttons.children].find(button => button.id == symbol);
     if(button) button.click();
 }
 
@@ -53,13 +54,11 @@ function clearCalculator() {
 clearCalculator();
 
 function populateDisplay(value) {
-    const display = document.querySelector('#display');
     if(populateDisplay.replaceLast) display.value = '';
     display.value += value;
 }
 
 function deleteLast() {
-    const display = document.querySelector('#display');
     display.value = display.value.slice(0, -1);
 }
 
@@ -69,7 +68,6 @@ function storeValue(value) {
 }
 
 function updateValue(value) {
-    const display = document.querySelector('#display');
     if(value == '.') {
         if(populateDisplay.replaceLast) value = '0.';
         else if(display.value.includes('.')) return;
