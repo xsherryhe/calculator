@@ -1,12 +1,12 @@
 function createButtons() {
     const buttons = document.querySelector('#buttons');
-    [7, 8, 9, '÷', 4, 5, 6, 'x', 1, 2, 3, '-', '.', 0, '=', '+', 'Clear']
+    ['Clear', 'Delete', 7, 8, 9, '÷', 4, 5, 6, 'x', 1, 2, 3, '-', '.', 0, '=', '+']
     .forEach(symbol => {
         const button = document.createElement('button');
         button.classList.add('button');
         button.id = symbol;
         button.textContent = symbol;
-        if(typeof symbol == 'number' || symbol == '.') 
+        if(typeof symbol == 'number' || symbol == '.' || symbol == 'Delete') 
             button.addEventListener('click', updateValue);
         if(['+', '-', 'x', '÷', '='].includes(symbol))
             button.addEventListener('click', updateOperation);
@@ -35,6 +35,11 @@ function populateDisplay(value) {
     display.value += value;
 }
 
+function deleteLast() {
+    const display = document.querySelector('#display');
+    display.value = display.value.slice(0, -1);
+}
+
 function storeValue(value) {
     if(storeValue.replaceLast) operate.nums.pop();
     operate.nums.push(value);
@@ -47,7 +52,8 @@ function updateValue(e) {
         if(populateDisplay.replaceLast) value = '0.';
         else if(display.value.includes('.')) return;
     }
-    populateDisplay(value);
+    if(value == 'Delete') deleteLast();
+    else populateDisplay(value);
     populateDisplay.replaceLast = display.value == '0';
     storeValue(display.value);
     storeValue.replaceLast = true;
