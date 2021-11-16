@@ -48,16 +48,17 @@ function updateValue(e) {
         else if(display.value.includes('.')) return;
     }
     populateDisplay(value);
-    populateDisplay.replaceLast = false;
+    populateDisplay.replaceLast = display.value == '0';
     storeValue(display.value);
     storeValue.replaceLast = true;
 }
 
 function updateOperation(e) {
+    let operation = e.target.id;
     populateDisplay.replaceLast = true;
-    storeValue.replaceLast = e.target.id == '=';
+    storeValue.replaceLast = operation == '=';
     if(operate.nums.length == 2 && operate.operation) operate();
-    if(e.target.id !== '=') operate.operation = e.target.id;
+    if(operation !== '=') operate.operation = operation;
 }
 
 function operate() {
