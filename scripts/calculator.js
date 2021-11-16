@@ -6,16 +6,22 @@ function createButtons() {
         button.classList.add('button');
         button.id = symbol;
         button.textContent = symbol;
-        if(typeof symbol == 'number' || symbol == '.' || symbol == 'Delete') 
-            button.addEventListener('click', updateValue);
-        if(['+', '-', 'x', '÷', '='].includes(symbol))
-            button.addEventListener('click', updateOperation);
-        if(symbol == 'Clear')
-            button.addEventListener('click', clearCalculator);
+        button.addEventListener('click', routeButton);
         buttons.appendChild(button);
     })
 }
 createButtons();
+
+function routeButton(e) {
+    e.target.blur();
+    const symbol = e.target.id;
+    if(!Number.isNaN(+symbol) || symbol == '.' || symbol == 'Delete')
+        updateValue(symbol);
+    if(['+', '-', 'x', '÷', '='].includes(symbol))
+        updateOperation(symbol);
+    if(symbol == 'Clear')
+        clearCalculator();
+}
 
 function enableKeyboard() {
     window.addEventListener('keyup', routeKey);
@@ -23,15 +29,15 @@ function enableKeyboard() {
 enableKeyboard();
 
 function routeKey(e) {
-    const symbol = e.key,
-          button = [...document.querySelectorAll('.button')]
+    const conversions = {'*': 'x', 
+                         '/': '÷', 
+                         Backspace: 'Delete', 
+                         Enter: '='};
+    let symbol = e.key;
+    if(conversions[symbol]) symbol = conversions[symbol];
+    const button = [...document.querySelectorAll('.button')]
                    .find(button => button.id == symbol);
-
     if(button) button.click();
-    if(symbol == '*') document.getElementById('x').click();
-    if(symbol == '/') document.getElementById('÷').click();
-    if(symbol == 'Backspace') document.getElementById('Delete').click();
-    if(symbol == 'Enter') document.getElementById('=').click();
 }
 
 function setOperationStorage() {
@@ -40,7 +46,6 @@ function setOperationStorage() {
 }
 
 function clearCalculator() {
-    document.querySelector('#Clear').blur();
     populateDisplay.replaceLast = true;
     populateDisplay(0);
     setOperationStorage();
@@ -63,10 +68,8 @@ function storeValue(value) {
     operate.nums.push(value);
 }
 
-function updateValue(e) {
-    e.target.blur();
-    let value = e.target.id,
-        display = document.querySelector('#display');
+function updateValue(value) {
+    const display = document.querySelector('#display');
     if(value == '.') {
         if(populateDisplay.replaceLast) value = '0.';
         else if(display.value.includes('.')) return;
@@ -78,9 +81,7 @@ function updateValue(e) {
     storeValue.replaceLast = true;
 }
 
-function updateOperation(e) {
-    e.target.blur();
-    let operation = e.target.id;
+function updateOperation(operation) {
     populateDisplay.replaceLast = true;
     storeValue.replaceLast = operation == '=';
     if(operate.nums.length == 2 && operate.operation) operate();
