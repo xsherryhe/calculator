@@ -1,4 +1,5 @@
 const buttons = document.querySelector('#buttons'),
+      memory = document.querySelector('#memory'),
       display = document.querySelector('#display');
 
 function createButtons() {
@@ -19,8 +20,10 @@ function routeButton(e) {
     const symbol = e.target.id;
     if(!Number.isNaN(+symbol) || symbol == '.' || symbol == 'Delete')
         updateValue(symbol);
-    if(['+', '-', 'x', '÷', '='].includes(symbol))
+    if(['+', '-', 'x', '÷'].includes(symbol))
         updateOperation(symbol);
+    if(symbol == '=')
+        finishOperation();
     if(symbol == 'Clear')
         clearCalculator();
 }
@@ -47,19 +50,26 @@ function setOperationStorage() {
 }
 
 function clearCalculator() {
+    memory.textContent = '';
     populateDisplay.replaceLast = true;
     populateDisplay(0);
     setOperationStorage();
 }
 clearCalculator();
 
+function populateMemory(symbol) {
+    const numsLength = operate.nums.length;
+    if(numsLength <= 1) memory.textContent = '';
+    memory.textContent += ' ' + operate.nums[numsLength - 1] + ' ' + symbol;
+}
+
 function populateDisplay(value) {
-    if(populateDisplay.replaceLast) display.value = '';
-    display.value += value;
+    if(populateDisplay.replaceLast) display.textContent = '';
+    display.textContent += value;
 }
 
 function deleteLast() {
-    display.value = display.value.slice(0, -1);
+    display.textContent = display.textContent.slice(0, -1);
 }
 
 function storeValue(value) {
@@ -70,20 +80,28 @@ function storeValue(value) {
 function updateValue(value) {
     if(value == '.') {
         if(populateDisplay.replaceLast) value = '0.';
-        else if(display.value.includes('.')) return;
+        else if(display.textContent.includes('.')) return;
     }
     if(value == 'Delete') deleteLast();
     else populateDisplay(value);
-    populateDisplay.replaceLast = display.value == '0';
-    storeValue(display.value);
+    populateDisplay.replaceLast = display.textContent == '0';
+    storeValue(display.textContent);
     storeValue.replaceLast = true;
 }
 
 function updateOperation(operation) {
     populateDisplay.replaceLast = true;
-    storeValue.replaceLast = operation == '=';
+    storeValue.replaceLast = false;
     if(operate.nums.length == 2 && operate.operation) operate();
-    if(operation !== '=') operate.operation = operation;
+    populateMemory(operation);
+    operate.operation = operation;
+}
+
+function finishOperation() {
+    populateDisplay.replaceLast = true;
+    storeValue.replaceLast = true;
+    populateMemory('=');
+    if(operate.nums.length == 2 && operate.operation) operate();
 }
 
 function operate() {
