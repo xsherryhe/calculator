@@ -52,8 +52,9 @@ function setOperationStorage() {
 function clearCalculator() {
     memory.textContent = '';
     populateDisplay.replaceLast = true;
+    storeValue.replaceLast = true;
     populateDisplay(0);
-    setOperationStorage();
+    setOperationStorage(0);
 }
 clearCalculator();
 
@@ -99,9 +100,10 @@ function updateOperation(operation) {
 
 function finishOperation() {
     populateDisplay.replaceLast = true;
-    storeValue.replaceLast = true;
-    populateMemory('=');
-    if(operate.nums.length == 2 && operate.operation) operate();
+    if(operate.nums.length == 2 && operate.operation) {
+        populateMemory('=');
+        operate();
+    }
 }
 
 function operate() {
