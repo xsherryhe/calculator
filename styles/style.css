@@ -3,6 +3,8 @@ html {
 }
 
 #calculator {
+    display: flex;
+    flex-direction: column;
     background-color: lightblue;
     border: 2px solid black;
     border-radius: 8px;
@@ -25,7 +27,7 @@ h1 {
     border: 1px solid black;
     border-radius: 6px;
     padding: 6px;
-    margin: 0 auto 20px;
+    margin-bottom: 20px;
 }
 
 #screen > * {
@@ -45,14 +47,13 @@ h1 {
 
 #buttons {
     display: grid;
-    grid-template: repeat(5, 1fr) / repeat(4, 1fr);
+    grid-template: 1.2fr repeat(4, 1fr) / repeat(4, 1fr);
     column-gap: 8px;
-    row-gap: 10px;
-    margin: auto;
+    row-gap: 12px;
 }
 
 .button {
-    font-size: 32px;
+    font-size: 30px;
     font-weight: 300;
     border-radius: 6px;
 }

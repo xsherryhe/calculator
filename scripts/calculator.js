@@ -32,8 +32,8 @@ function routeButton(e) {
 
 function enableKeyboard() {
     window.addEventListener('keydown', addActive);
+    window.addEventListener('keydown', routeKey);
     window.addEventListener('keyup', removeActive);
-    window.addEventListener('keyup', routeKey);
 }
 enableKeyboard();
 
