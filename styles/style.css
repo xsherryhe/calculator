@@ -1,9 +1,31 @@
+html {
+    background-color: beige;
+}
+
+#calculator {
+    background-color: lightblue;
+    border: 2px solid black;
+    border-radius: 8px;
+    width: 325px;
+    margin: 50px auto;
+    padding: 10px 20px 20px;
+}
+
+h1 {
+    text-align: center;
+    font-size: 45px;
+    font-weight: 500;
+    color: black;
+    margin: 0 0 5px;
+}
+
 #screen {
+    background-color: rgb(233, 233, 233);
     box-sizing: border-box;
     border: 1px solid black;
-    width: 40%;
-    padding: 4px;
-    margin: 20px auto 5px;
+    border-radius: 6px;
+    padding: 6px;
+    margin: 0 auto 20px;
 }
 
 #screen > * {
@@ -12,36 +34,53 @@
 }
 
 #memory {
-    min-height: 32px;
-    font-size: 28px;
+    min-height: 30px;
+    font-size: 20px;
 }
 
 #display {
-    min-height: 42px;
-    font-size: 36px;
+    min-height: 44px;
+    font-size: 38px;
 }
 
 #buttons {
     display: grid;
     grid-template: repeat(5, 1fr) / repeat(4, 1fr);
-    column-gap: 5px;
-    row-gap: 5px;
-    width: 40%;
+    column-gap: 8px;
+    row-gap: 10px;
     margin: auto;
 }
 
 .button {
-    font-size: 36px;
+    font-size: 32px;
+    font-weight: 300;
+    border-radius: 6px;
 }
 
-#memory, #display, .button {
-    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
+.value {
+    background-color: lightpink;
+}
+
+.operation {
+    background-color: lightgray;
+}
+
+.other {
+    background-color: lightgray;
+}
+
+#\= {
+    background-color: lightcoral;
+}
+
+h1, #memory, #display, .button {
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
 #Clear {
     grid-column: 1 / span 2;
 }
 
-#Delete {
+#Backspace {
     grid-column: 3 / span 2;
 }

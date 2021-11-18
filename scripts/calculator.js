@@ -3,10 +3,12 @@ const buttons = document.querySelector('#buttons'),
       display = document.querySelector('#display');
 
 function createButtons() {
-    ['Clear', 'Delete', 7, 8, 9, '÷', 4, 5, 6, 'x', 1, 2, 3, '-', '.', 0, '=', '+']
+    ['Clear', 'Backspace', 7, 8, 9, '÷', 4, 5, 6, 'x', 1, 2, 3, '-', '.', 0, '=', '+']
     .forEach(symbol => {
         const button = document.createElement('button');
-        button.classList.add('button');
+        button.classList.add('button', typeof symbol == 'number' || symbol == '.' ? 'value'
+                                     : ['+', '-', 'x', '÷'].includes(symbol) ? 'operation'
+                                     : 'other');
         button.id = symbol;
         button.textContent = symbol;
         button.addEventListener('click', routeButton);
@@ -18,9 +20,9 @@ createButtons();
 function routeButton(e) {
     e.target.blur();
     const symbol = e.target.id;
-    if(!Number.isNaN(+symbol) || symbol == '.' || symbol == 'Delete')
+    if(e.target.classList.contains('value') || symbol == 'Backspace')
         updateValue(symbol);
-    if(['+', '-', 'x', '÷'].includes(symbol))
+    if(e.target.classList.contains('operation'))
         updateOperation(symbol);
     if(symbol == '=')
         finishOperation();
@@ -35,8 +37,7 @@ enableKeyboard();
 
 function routeKey(e) {
     const conversions = {'*': 'x', 
-                         '/': '÷', 
-                         Backspace: 'Delete', 
+                         '/': '÷',
                          Enter: '='};
     let symbol = e.key;
     if(conversions[symbol]) symbol = conversions[symbol];
@@ -71,6 +72,7 @@ function populateDisplay(value) {
 
 function deleteLast() {
     display.textContent = display.textContent.slice(0, -1);
+    if(!display.textContent) display.textContent = '0';
 }
 
 function storeValue(value) {
@@ -83,7 +85,7 @@ function updateValue(value) {
         if(populateDisplay.replaceLast) value = '0.';
         else if(display.textContent.includes('.')) return;
     }
-    if(value == 'Delete') deleteLast();
+    if(value == 'Backspace') deleteLast();
     else populateDisplay(value);
     populateDisplay.replaceLast = display.textContent == '0';
     storeValue(display.textContent);
@@ -120,7 +122,7 @@ function operate() {
         case 'x': result = x * y; break;
         case '÷': result = x / y; break;
     }
-    result = Math.round((result + Number.EPSILON) * 10**14) / 10**14;
+    result = Math.round((result + Number.EPSILON) * 10**12) / 10**12;
     populateDisplay(result);
     setOperationStorage(result);
     return result;
