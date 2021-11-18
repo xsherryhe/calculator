@@ -3,8 +3,6 @@ html {
 }
 
 #calculator {
-    display: flex;
-    flex-direction: column;
     background-color: lightblue;
     border: 2px solid black;
     border-radius: 8px;
@@ -56,6 +54,7 @@ h1 {
     font-size: 30px;
     font-weight: 300;
     border-radius: 6px;
+    padding: 1px 6px;
 }
 
 .button:active, .button.active {
