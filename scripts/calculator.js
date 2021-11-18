@@ -3,7 +3,7 @@ const buttons = document.querySelector('#buttons'),
       display = document.querySelector('#display');
 
 function createButtons() {
-    ['Clear', 'Backspace', 7, 8, 9, '÷', 4, 5, 6, 'x', 1, 2, 3, '-', '.', 0, '=', '+']
+    ['Clear', 'Backspace', 7, 8, 9, '÷', 4, 5, 6, 'x', 1, 2, 3, '-', 0, '.', '=', '+']
     .forEach(symbol => {
         const button = document.createElement('button');
         button.classList.add('button', typeof symbol == 'number' || symbol == '.' ? 'value'
