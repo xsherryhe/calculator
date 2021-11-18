@@ -31,18 +31,34 @@ function routeButton(e) {
 }
 
 function enableKeyboard() {
+    window.addEventListener('keydown', addActive);
+    window.addEventListener('keyup', removeActive);
     window.addEventListener('keyup', routeKey);
 }
 enableKeyboard();
 
+function addActive(e) {
+    const button = getButton(e.key);
+    if(button) button.classList.add('active');
+}
+
+function removeActive(e) {
+    const button = getButton(e.key);
+    if(button) button.classList.remove('active');
+}
+
 function routeKey(e) {
-    const conversions = {'*': 'x', 
-                         '/': '÷',
-                         Enter: '='};
-    let symbol = e.key;
-    if(conversions[symbol]) symbol = conversions[symbol];
-    const button = [...buttons.children].find(button => button.id == symbol);
+    const button = getButton(e.key);
     if(button) button.click();
+}
+
+function getButton(key) {
+    const conversions = {
+        '*': 'x',
+        '/': '÷',
+        Enter: '='
+    };
+    return document.getElementById(conversions[key] || key);
 }
 
 function setOperationStorage() {
