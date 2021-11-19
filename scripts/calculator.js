@@ -87,6 +87,19 @@ function populateMemory(symbol) {
 function populateDisplay(value) {
     if(populateDisplay.replaceLast) display.textContent = '';
     display.textContent += value;
+    display.textContent = removeLeadingZeros(display.textContent);
+}
+
+function removeLeadingZeros(text) {
+    const isNegative = text[0] == '-';
+    if(isNegative) text = text.slice(1);
+    while(hasLeadingZero(text)) text = text.slice(1);
+    if(isNegative) text = '-' + text;
+    return text;
+}
+
+function hasLeadingZero(text) {
+    return text.length > 1 && text[0] == '0' && text[1] !== '.';
 }
 
 function deleteLast() {
@@ -95,20 +108,20 @@ function deleteLast() {
 }
 
 function storeValue(value) {
-    if(Number.isNaN(+value)) value = 0;
+    if(Number.isNaN(+value)) value = '0';
     if(storeValue.replaceLast) operate.nums.pop();
     operate.nums.push(value);
 }
 
 function updateValue(value) {
     if(value == '.') {
-        if(display.textContent.includes('.')) return;
-        if(populateDisplay.replaceLast) value = '0.';
+        if(populateDisplay.replaceLast || display.textContent == '-') value = '0.';
+        else if(display.textContent.includes('.')) return;
     }
 
     if(value == 'neg') {
-        if(display.textContent.includes('-')) return;
         if(populateDisplay.replaceLast) value = '-';
+        else if(display.textContent.includes('-')) return;
         else {
             populateDisplay.replaceLast = true;
             value = '-' + display.textContent;
@@ -117,7 +130,7 @@ function updateValue(value) {
 
     if(value == 'Back') deleteLast();
     else populateDisplay(value);
-    populateDisplay.replaceLast = display.textContent == '0';
+    populateDisplay.replaceLast = false;
     storeValue(display.textContent);
     storeValue.replaceLast = true;
 }
