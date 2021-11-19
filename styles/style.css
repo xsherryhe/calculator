@@ -53,8 +53,10 @@ h1 {
 .button {
     font-size: 30px;
     font-weight: 300;
+    color: black;
     border-radius: 6px;
     padding: 6px;
+    cursor: pointer;
 }
 
 .button:active, .button.active {
@@ -65,12 +67,24 @@ h1 {
     background-color: lightpink;
 }
 
+.value:hover, .value.active {
+    background-color: rgb(250, 209, 215);
+}
+
 .operation, .other {
     background-color: lightgray;
 }
 
+.operation:hover, .other:hover, .operation.active, .other.active {
+    background-color: rgb(228, 228, 228);
+}
+
 #\= {
     background-color: lightcoral;
+}
+
+#\=:hover, #\=.active {
+    background-color: rgb(255, 170, 170);
 }
 
 h1, #memory, #display, .button {
