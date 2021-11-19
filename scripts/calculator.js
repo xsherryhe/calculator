@@ -3,14 +3,16 @@ const buttons = document.querySelector('#buttons'),
       display = document.querySelector('#display');
 
 function createButtons() {
-    ['Clear', 'Backspace', 7, 8, 9, '÷', 4, 5, 6, 'x', 1, 2, 3, '-', 0, '.', '=', '+']
+    ['Clear', 'Back', '÷', 7, 8, 9, 'x', 4, 5, 6, '-', 1, 2, 3, '+', 'neg', 0, '.', '=']
     .forEach(symbol => {
         const button = document.createElement('button');
-        button.classList.add('button', typeof symbol == 'number' || symbol == '.' ? 'value'
+        button.classList.add('button', typeof symbol == 'number' || symbol == '.' || symbol == 'neg' ? 'value'
                                      : ['+', '-', 'x', '÷'].includes(symbol) ? 'operation'
                                      : 'other');
         button.id = symbol;
-        button.textContent = symbol;
+        button.textContent = symbol == '-' ? '–' 
+                           : symbol == 'neg' ? '( – )'
+                           : symbol;
         button.addEventListener('click', routeButton);
         buttons.appendChild(button);
     })
@@ -20,7 +22,7 @@ createButtons();
 function routeButton(e) {
     e.target.blur();
     const symbol = e.target.id;
-    if(e.target.classList.contains('value') || symbol == 'Backspace')
+    if(e.target.classList.contains('value') || symbol == 'Back')
         updateValue(symbol);
     if(e.target.classList.contains('operation'))
         updateOperation(symbol);
@@ -56,6 +58,7 @@ function getButton(key) {
     const conversions = {
         '*': 'x',
         '/': '÷',
+        Backspace: 'Back',
         Enter: '='
     };
     return document.getElementById(conversions[key] || key);
@@ -92,16 +95,27 @@ function deleteLast() {
 }
 
 function storeValue(value) {
+    if(Number.isNaN(+value)) value = 0;
     if(storeValue.replaceLast) operate.nums.pop();
     operate.nums.push(value);
 }
 
 function updateValue(value) {
     if(value == '.') {
+        if(display.textContent.includes('.')) return;
         if(populateDisplay.replaceLast) value = '0.';
-        else if(display.textContent.includes('.')) return;
     }
-    if(value == 'Backspace') deleteLast();
+
+    if(value == 'neg') {
+        if(display.textContent.includes('-')) return;
+        if(populateDisplay.replaceLast) value = '-';
+        else {
+            populateDisplay.replaceLast = true;
+            value = '-' + display.textContent;
+        }
+    }
+
+    if(value == 'Back') deleteLast();
     else populateDisplay(value);
     populateDisplay.replaceLast = display.textContent == '0';
     storeValue(display.textContent);

@@ -88,13 +88,13 @@ h1 {
 }
 
 h1, #memory, #display, .button {
-    font-family:'Gill Sans', 'Gill Sans MT', 'Trebuchet MS', sans-serif;
+    font-family: 'Gill Sans', 'Gill Sans MT', 'Trebuchet MS', sans-serif;
+}
+
+#neg {
+    font-size: 20px;
 }
 
 #Clear {
     grid-column: 1 / span 2;
-}
-
-#Backspace {
-    grid-column: 3 / span 2;
 }
