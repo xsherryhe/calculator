@@ -1,5 +1,5 @@
 html {
-    background-color: beige;
+    background-color: rgb(236, 250, 255);/*rgb(255, 255, 238);*/
 }
 
 #calculator {
@@ -45,7 +45,7 @@ h1 {
 
 #buttons {
     display: grid;
-    grid-template: 1.2fr repeat(4, 1fr) / repeat(4, 1fr);
+    grid-template: repeat(5, 1fr) / repeat(4, 1fr);
     column-gap: 10px;
     row-gap: 12px;
 }
@@ -55,7 +55,7 @@ h1 {
     font-weight: 300;
     color: black;
     border-radius: 6px;
-    padding: 6px;
+    padding: 8px 6px;
     cursor: pointer;
 }
 
@@ -79,20 +79,16 @@ h1 {
     background-color: rgb(228, 228, 228);
 }
 
-#\= {
-    background-color: lightcoral;
-}
-
-#\=:hover, #\=.active {
-    background-color: rgb(255, 170, 170);
-}
-
 h1, #memory, #display, .button {
     font-family: 'Gill Sans', 'Gill Sans MT', 'Trebuchet MS', sans-serif;
 }
 
 #neg {
     font-size: 20px;
+}
+
+#Clear, #Back {
+    font-size: 28px;
 }
 
 #Clear {
