@@ -88,6 +88,7 @@ function populateDisplay(value) {
     if(populateDisplay.replaceLast) display.textContent = '';
     display.textContent += value;
     display.textContent = removeLeadingZeros(display.textContent);
+    if(!display.textContent) display.textContent = '0';
 }
 
 function removeLeadingZeros(text) {
@@ -100,11 +101,6 @@ function removeLeadingZeros(text) {
 
 function hasLeadingZero(text) {
     return text.length > 1 && text[0] == '0' && text[1] !== '.';
-}
-
-function deleteLast() {
-    display.textContent = display.textContent.slice(0, -1);
-    if(!display.textContent) display.textContent = '0';
 }
 
 function storeValue(value) {
@@ -120,7 +116,7 @@ function updateValue(value) {
     }
 
     if(value == 'neg') {
-        if(populateDisplay.replaceLast) value = '-';
+        if(populateDisplay.replaceLast || display.textContent == '0') value = '-';
         else if(display.textContent.includes('-')) return;
         else {
             populateDisplay.replaceLast = true;
@@ -128,8 +124,12 @@ function updateValue(value) {
         }
     }
 
-    if(value == 'Back') deleteLast();
-    else populateDisplay(value);
+    if(value == 'Back') {
+        populateDisplay.replaceLast = true;
+        value = display.textContent.slice(0, -1);
+    }
+
+    populateDisplay(value);
     populateDisplay.replaceLast = false;
     storeValue(display.textContent);
     storeValue.replaceLast = true;
