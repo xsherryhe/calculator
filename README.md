@@ -8,6 +8,6 @@ The project demonstrates the integration of a variety of front-end development t
 
 ## Preview
 
-![Calculator preview](./images/calculator.png)
+[![Calculator preview](./images/calculator.png)](https://xsherryhe.github.io/calculator/)
 
 Run this project [here](https://xsherryhe.github.io/calculator/).
